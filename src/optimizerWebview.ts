@@ -1,14 +1,14 @@
 import { window, ViewColumn, WebviewPanel } from "vscode";
 
-import { WSLCheck, TerminalCheck, CheckItem } from "./checks";
+import initializeChecks from "./checks";
+import { CheckItem, CheckType } from "./checks/base";
 
 export default class OptimizerWebview {
   panel: WebviewPanel | undefined;
   checks: Array<CheckItem>;
 
   constructor() {
-    // Inititalize each check item.
-    this.checks = Array(new TerminalCheck(), new WSLCheck());
+    this.checks = initializeChecks();
   }
 
   showWebview() {
@@ -18,14 +18,31 @@ export default class OptimizerWebview {
       ViewColumn.One,
       {}
     );
+
     this.panel.webview.html = this.serializeChecks();
+    this.panel.webview.onDidReceiveMessage(this.handleClick);
+  }
+
+  handleClick(message: any): void {
+    switch (message.checkType) {
+      case "wsl":
+        this.checks.forEach(c => {
+          if (c.type === CheckType.WSL) {
+            // toggle
+          }
+        });
+        break;
+
+      default:
+        break;
+    }
   }
 
   serializeChecks() {
-    let checks: string = "";
+    let checksHtml: string = "";
 
     for (const check of this.checks) {
-      checks += check.render();
+      checksHtml += check.render();
     }
 
     return `<!DOCTYPE html>
@@ -59,7 +76,7 @@ export default class OptimizerWebview {
       </head>
       <body>
         <ul class="check-list">
-          ${checks}
+          ${checksHtml}
           <li style="margin: 20px 0 0 0"><button>Install Selected</button></li>
         </ul>
       </body>

@@ -1,4 +1,4 @@
-enum CheckType {
+export enum CheckType {
   WSL,
   Terminal,
   Font,
