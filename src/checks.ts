@@ -1,24 +1,56 @@
 enum CheckType {
   WSL,
-  Terminal
+  Terminal,
+  Font,
+  None
 }
-enum CheckState {}
 
-interface CheckItem {
-  type: CheckType;
-  title: string;
+export interface CheckItem {
   details: string;
+  template: string;
+  title: string;
+  type: CheckType;
 
   clickHandler(): void;
-  serialize(): string;
+  render(): string;
 }
 
-export class WSLCheck implements CheckItem {
-  type: CheckType;
+class CheckBase {
   details: string;
+  template: string;
   title: string;
+  type: CheckType;
 
   constructor() {
+    this.details = "";
+    this.title = "";
+    this.type = CheckType.None;
+
+    this.template = `
+    <li class="check-item">
+      <div class="check-item">
+        <div class="check-box"><input type="checkbox" name="wsl" value="wsl"></div>
+        <div class="check-item-details">
+          <h1 class="check-header">%title%</h1>
+          <p>%details%</p>
+          <a href="#">Do it now</a>
+        </div>
+      </div>
+    </li>
+    `;
+  }
+
+  render() {
+    return this.template
+      .replace("%title%", this.title)
+      .replace("%details%", this.details);
+  }
+}
+
+export class WSLCheck extends CheckBase implements CheckItem {
+  constructor() {
+    super();
+
     this.type = CheckType.WSL;
     this.title = "Install WSL";
     this.details = `Install and run all of your favorite Linux command-line apps
@@ -26,27 +58,12 @@ export class WSLCheck implements CheckItem {
   }
 
   clickHandler() {}
-
-  serialize() {
-    return `<li class="check-item">
-      <div class="check-item">
-        <div class="check-box"><input type="checkbox" name="wsl" value="wsl"></div>
-        <div class="check-item-details">
-          <h1 class="check-header">${this.title}</h1>
-          <p>${this.details}</p>
-          <a href="#">Do it now</a>
-        </div>
-      </div>
-    </li>`;
-  }
 }
 
-export class TerminalCheck implements CheckItem {
-  type: CheckType;
-  details: string;
-  title: string;
-
+export class TerminalCheck extends CheckBase implements CheckItem {
   constructor() {
+    super();
+
     this.type = CheckType.Terminal;
     this.title = "Install the Windows Terminal";
     this.details = `Install a new, modern, feature-rich, productive terminal
@@ -54,17 +71,4 @@ export class TerminalCheck implements CheckItem {
   }
 
   clickHandler() {}
-
-  serialize() {
-    return `<li class="check-item">
-      <div class="check-item">
-        <div class="check-box"><input type="checkbox" name="terminal" value="terminal"></div>
-        <div class="check-item-details">
-          <h1 class="check-header">${this.title}</h1>
-          <p>${this.details}</p>
-          <a href="#">Do it now</a>
-        </div>
-      </div>
-    </li>`;
-  }
 }

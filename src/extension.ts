@@ -1,4 +1,4 @@
-import { window, ExtensionContext, MessageItem, ViewColumn } from "vscode";
+import { window, ExtensionContext, MessageItem } from "vscode";
 import { platform } from "os";
 
 import OptimizerWebview from "./optimizerWebview";
