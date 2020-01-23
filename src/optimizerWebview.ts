@@ -16,26 +16,32 @@ export default class OptimizerWebview {
       "optimizer",
       "Optimize Your Windows DevBox",
       ViewColumn.One,
-      {}
+      { enableScripts: true }
     );
 
     this.panel.webview.html = this.serializeChecks();
-    this.panel.webview.onDidReceiveMessage(this.handleClick);
+    this.panel.webview.onDidReceiveMessage(this.handleClick.bind(this));
   }
 
   handleClick(message: any): void {
-    switch (message.checkType) {
-      case "wsl":
-        this.checks.forEach(c => {
-          if (c.type === CheckType.WSL) {
-            // toggle
-          }
-        });
-        break;
-
-      default:
-        break;
+    if (message.command === "toggle") {
+      this.checks.forEach(c => {
+        if (c.type === message.event) {
+          c.toggle();
+        }
+      });
     }
+
+    if (message.command === "exec") {
+      // TODO: Execute a single task.
+    }
+
+    if (message.command === "execSelected") {
+      // TODO: Execute all checked tasks.
+    }
+
+    // TODO: Start up a long-running notification indicating the checks'
+    // progress as they run.
   }
 
   serializeChecks() {
@@ -77,8 +83,17 @@ export default class OptimizerWebview {
       <body>
         <ul class="check-list">
           ${checksHtml}
-          <li style="margin: 20px 0 0 0"><button>Install Selected</button></li>
+          <li style="margin: 20px 0 0 0"><button onClick="handleClick('execSelected')">Install Selected</button></li>
         </ul>
+
+        <script>
+          const vscode = acquireVsCodeApi();
+
+          function handleClick(c, e) {
+            vscode.postMessage({ command: c, event: e });
+            return false;
+          }
+        </script>
       </body>
       </html>`;
   }

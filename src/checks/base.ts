@@ -1,39 +1,43 @@
 export enum CheckType {
-  WSL,
-  Terminal,
-  Font,
-  None
+  WSL = "WSL",
+  Terminal = "Terminal",
+  Font = "Font",
+  None = "None"
 }
 
 export interface CheckItem {
   details: string;
+  isChecked: boolean;
   template: string;
   title: string;
   type: CheckType;
 
   clickHandler(): void;
   render(): string;
+  toggle(): void;
 }
 
 class CheckBase {
   details: string;
+  isChecked: boolean;
   template: string;
   title: string;
   type: CheckType;
 
   constructor() {
     this.details = "";
+    this.isChecked = false;
     this.title = "";
     this.type = CheckType.None;
 
     this.template = `
     <li class="check-item">
       <div class="check-item">
-        <div class="check-box"><input type="checkbox" name="wsl" value="wsl"></div>
+        <div class="check-box"><input type="checkbox" onClick="handleClick('toggle', '%type%')"></div>
         <div class="check-item-details">
           <h1 class="check-header">%title%</h1>
           <p>%details%</p>
-          <a href="#">Do it now</a>
+          <a href="#" onClick="handleClick('exec', '%type%')">Do it now</a>
         </div>
       </div>
     </li>
@@ -42,8 +46,13 @@ class CheckBase {
 
   render() {
     return this.template
-      .replace("%title%", this.title)
-      .replace("%details%", this.details);
+      .replace(/\%type\%/gi, this.type.toString())
+      .replace(/\%title\%/gi, this.title)
+      .replace(/\%details\%/gi, this.details);
+  }
+
+  toggle() {
+    this.isChecked = !this.isChecked;
   }
 }
 
