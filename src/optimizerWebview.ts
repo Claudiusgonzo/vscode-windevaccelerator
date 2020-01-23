@@ -1,4 +1,4 @@
-import { window, ViewColumn, WebviewPanel } from "vscode";
+import { window, ViewColumn, WebviewPanel, ProgressLocation } from "vscode";
 
 import initializeChecks from "./checks";
 import { CheckItem, CheckType } from "./checks/base";
@@ -37,11 +37,50 @@ export default class OptimizerWebview {
     }
 
     if (message.command === "execSelected") {
-      // TODO: Execute all checked tasks.
+      this.executeSelected();
+    }
+  }
+
+  executeSelected() {
+    const selected: Array<CheckItem> = Array<CheckItem>();
+    for (let i = 0; i < this.checks.length; i++) {
+      selected.push(this.checks[i]);
     }
 
-    // TODO: Start up a long-running notification indicating the checks'
-    // progress as they run.
+    window.withProgress(
+      {
+        location: ProgressLocation.Notification,
+        title: `Configuring ${selected.length} tools`,
+        cancellable: false
+      },
+      async progress => {
+        const incrementLength = 100 / selected.length;
+
+        progress.report({ increment: 0 });
+
+        return new Promise(resolve => {
+          (function next(count) {
+            if (count === selected.length) {
+              return resolve();
+            }
+
+            let cur = selected[count];
+            let increment = incrementLength;
+
+            if (count > 0) {
+              increment = incrementLength * count;
+            }
+
+            progress.report({
+              increment: increment,
+              message: `Installing ${cur.type}...`
+            });
+
+            setTimeout(next, 1500, ++count);
+          })(0);
+        });
+      }
+    );
   }
 
   serializeChecks() {

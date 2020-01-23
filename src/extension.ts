@@ -8,7 +8,7 @@ export function activate(context: ExtensionContext) {
     // return;
   }
 
-  const runConfig: MessageItem = { title: "Run" };
+  const runConfig: MessageItem = { title: "Let's do it!" };
   const learnMore: MessageItem = { title: "Learn more" };
   const optimizer = new OptimizerWebview();
 
