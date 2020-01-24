@@ -1,7 +1,8 @@
-import { window, ExtensionContext, MessageItem } from "vscode";
+import { window, ExtensionContext, MessageItem, commands } from "vscode";
 import { platform } from "os";
 
 import OptimizerWebview from "./optimizerWebview";
+import DefenderOptimizer from "./defenderOptimizer";
 
 export function activate(context: ExtensionContext) {
   if (platform() !== "win32") {
@@ -10,7 +11,14 @@ export function activate(context: ExtensionContext) {
 
   const runConfig: MessageItem = { title: "Let's do it!" };
   const learnMore: MessageItem = { title: "Learn more" };
-  const optimizer = new OptimizerWebview(context);
+
+  const devOptimizer = new OptimizerWebview(context);
+  const defenderOptimizer = new DefenderOptimizer();
+
+  commands.registerCommand(
+    "windevoptimizer.configureDefender",
+    defenderOptimizer.configureFolder
+  );
 
   window
     .showInformationMessage(
@@ -21,7 +29,7 @@ export function activate(context: ExtensionContext) {
     )
     .then(async (result: MessageItem | undefined) => {
       if (result === runConfig) {
-        optimizer.showWebview();
+        devOptimizer.showWebview();
       }
     });
 }
