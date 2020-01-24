@@ -10,7 +10,7 @@ export function activate(context: ExtensionContext) {
 
   const runConfig: MessageItem = { title: "Let's do it!" };
   const learnMore: MessageItem = { title: "Learn more" };
-  const optimizer = new OptimizerWebview();
+  const optimizer = new OptimizerWebview(context);
 
   window
     .showInformationMessage(

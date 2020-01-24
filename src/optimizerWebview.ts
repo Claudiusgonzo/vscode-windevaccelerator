@@ -1,14 +1,24 @@
-import { window, ViewColumn, WebviewPanel, ProgressLocation } from "vscode";
+import {
+  window,
+  ViewColumn,
+  WebviewPanel,
+  ProgressLocation,
+  Uri,
+  ExtensionContext
+} from "vscode";
+import * as path from "path";
 
 import initializeChecks from "./checks";
-import { CheckItem, CheckType } from "./checks/base";
+import { CheckItem } from "./checks/base";
 
 export default class OptimizerWebview {
-  panel: WebviewPanel | undefined;
   checks: Array<CheckItem>;
+  context: ExtensionContext;
+  panel: WebviewPanel | undefined;
 
-  constructor() {
-    this.checks = initializeChecks();
+  constructor(context: ExtensionContext) {
+    this.checks = Array<CheckItem>();
+    this.context = context;
   }
 
   showWebview() {
@@ -16,8 +26,15 @@ export default class OptimizerWebview {
       "optimizer",
       "Optimize Your Windows DevBox",
       ViewColumn.One,
-      { enableScripts: true }
+      {
+        enableScripts: true,
+        localResourceRoots: [
+          Uri.file(path.join(this.context.extensionPath, "resources"))
+        ]
+      }
     );
+
+    this.checks = initializeChecks(this.context, this.panel);
 
     this.panel.webview.html = this.serializeChecks();
     this.panel.webview.onDidReceiveMessage(this.handleClick.bind(this));
@@ -41,10 +58,13 @@ export default class OptimizerWebview {
     }
   }
 
-  executeSelected() {
+  async executeSelected() {
     const selected: Array<CheckItem> = Array<CheckItem>();
+
     for (let i = 0; i < this.checks.length; i++) {
-      selected.push(this.checks[i]);
+      if (this.checks[i].isChecked) {
+        selected.push(this.checks[i]);
+      }
     }
 
     window.withProgress(
@@ -58,8 +78,8 @@ export default class OptimizerWebview {
 
         progress.report({ increment: 0 });
 
-        return new Promise(resolve => {
-          (function next(count) {
+        return new Promise(async resolve => {
+          (async function next(count) {
             if (count === selected.length) {
               return resolve();
             }
@@ -76,7 +96,9 @@ export default class OptimizerWebview {
               message: `Installing ${cur.type}...`
             });
 
-            setTimeout(next, 1500, ++count);
+            await cur.install();
+
+            setTimeout(next, 2500, ++count);
           })(0);
         });
       }
@@ -99,9 +121,23 @@ export default class OptimizerWebview {
         <style>
           * { font-family: Arial, Helvetica, sans-serif; }
 
+          .logo {
+            width: 75px;
+            height: 75px;
+            margin: 0 15px 0 0;
+           }
+
+          body.vscode-light {
+            color: black;
+          }
+
+          body.vscode-dark {
+            color: white;
+          }
+
           .check-list {
             list-style: none;
-            margin-top: 20px;
+            margin-top: 30px;
           }
 
           .check-item {
@@ -120,6 +156,8 @@ export default class OptimizerWebview {
         </style>
       </head>
       <body>
+        <h1>Windows Setup Helper</h1>
+        <p>Select items below then click the install button to install and enable useful developer tools.</p>
         <ul class="check-list">
           ${checksHtml}
           <li style="margin: 20px 0 0 0"><button onClick="handleClick('execSelected')">Install Selected</button></li>

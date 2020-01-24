@@ -1,3 +1,7 @@
+import * as path from "path";
+import { spawn } from "child_process";
+import { ExtensionContext, Uri } from "vscode";
+
 export enum CheckType {
   WSL = "WSL",
   Terminal = "Terminal",
@@ -12,20 +16,22 @@ export interface CheckItem {
   title: string;
   type: CheckType;
 
-  clickHandler(): void;
   render(): string;
   toggle(): void;
+  install(): Promise<boolean>;
 }
 
 class CheckBase {
   details: string;
+  imagePath: Uri;
   isChecked: boolean;
   template: string;
   title: string;
   type: CheckType;
 
-  constructor() {
+  constructor(imagePath: Uri) {
     this.details = "";
+    this.imagePath = imagePath;
     this.isChecked = false;
     this.title = "";
     this.type = CheckType.None;
@@ -34,6 +40,7 @@ class CheckBase {
     <li class="check-item">
       <div class="check-item">
         <div class="check-box"><input type="checkbox" onClick="handleClick('toggle', '%type%')"></div>
+        <div><img class="logo" src="%imagePath%"></div>
         <div class="check-item-details">
           <h1 class="check-header">%title%</h1>
           <p>%details%</p>
@@ -47,6 +54,7 @@ class CheckBase {
   render() {
     return this.template
       .replace(/\%type\%/gi, this.type.toString())
+      .replace(/\%imagePath\%/gi, this.imagePath.toString())
       .replace(/\%title\%/gi, this.title)
       .replace(/\%details\%/gi, this.details);
   }
@@ -57,8 +65,8 @@ class CheckBase {
 }
 
 export class WSLCheck extends CheckBase implements CheckItem {
-  constructor() {
-    super();
+  constructor(imagePath: Uri) {
+    super(imagePath);
 
     this.type = CheckType.WSL;
     this.title = "Install WSL";
@@ -66,12 +74,29 @@ export class WSLCheck extends CheckBase implements CheckItem {
     and tools along side your favorite Windows Apps.`;
   }
 
-  clickHandler() {}
+  async install() {
+    // # Enable necessary features
+    // dism.exe /online /enable-feature /featurename:Microsoft-Windows-Subsystem-Linux /all /norestart
+    // dism.exe /online /enable-feature /featurename:VirtualMachinePlatform /all /norestart
+    // # Download the appx from our docs page and install it
+    // curl.exe -LO https://aka.ms/wsl-ubuntu-1804
+    // Add-AppxPackage .\wsl-ubuntu-1804
+    // # RESTART to actually use WSL! Do not use the app before
+    return new Promise<boolean>(resolve => {
+      // const cp = spawn("powershell.exe", [
+      //   "Enable-WindowsOptionalFeature",
+      //   "-Online",
+      //   "-FeatureName Microsoft-Windows-Subsystem-Linux"
+      // ]);
+      // cp.on("data", console.log.bind(console));
+      resolve(true);
+    });
+  }
 }
 
 export class TerminalCheck extends CheckBase implements CheckItem {
-  constructor() {
-    super();
+  constructor(imagePath: Uri) {
+    super(imagePath);
 
     this.type = CheckType.Terminal;
     this.title = "Install the Windows Terminal";
@@ -79,5 +104,10 @@ export class TerminalCheck extends CheckBase implements CheckItem {
     application for command-line users.`;
   }
 
-  clickHandler() {}
+  async install() {
+    return new Promise<boolean>(resolve => {
+      // TODO
+      resolve(true);
+    });
+  }
 }
