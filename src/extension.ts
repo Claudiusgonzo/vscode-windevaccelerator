@@ -3,6 +3,7 @@ import { platform } from "os";
 
 import OptimizerWebview from "./optimizerWebview";
 import DefenderOptimizer from "./defenderOptimizer";
+import IndexerOptimizer from "./indexerOptimizer";
 
 export function activate(context: ExtensionContext) {
   if (platform() !== "win32") {
@@ -14,10 +15,16 @@ export function activate(context: ExtensionContext) {
 
   const devOptimizer = new OptimizerWebview(context);
   const defenderOptimizer = new DefenderOptimizer();
+  const indexerOptimizer = new IndexerOptimizer();
 
   commands.registerCommand(
     "windevoptimizer.configureDefender",
     defenderOptimizer.configureFolder
+  );
+
+  commands.registerCommand(
+    "windevoptimizer.configureIndexer",
+    indexerOptimizer.configureFolder
   );
 
   window
