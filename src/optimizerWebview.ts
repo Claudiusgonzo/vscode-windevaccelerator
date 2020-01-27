@@ -119,12 +119,17 @@ export default class OptimizerWebview {
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>Windows Dev Box Optimizer</title>
         <style>
-          * { font-family: Arial, Helvetica, sans-serif; }
+          * { font-family: Verdana, Helvetica, sans-serif; }
 
           .logo {
-            width: 75px;
-            height: 75px;
+            width: 100px;
+            /* height: 75px; */
             margin: 0 15px 0 0;
+           }
+
+           img {
+             max-width: 100px;
+             max-height: 100px;
            }
 
           body.vscode-light {
@@ -147,7 +152,7 @@ export default class OptimizerWebview {
 
           .check-box { padding: 0 10px 0 0; }
 
-          .check-item-details { margin-bottom: 20px; }
+          .check-item-details { margin-bottom: 20px; margin-left: 20px;}
 
           .check-item-details h1,
           .check-item-details p { margin: 0 0 5px 0; }
@@ -156,11 +161,12 @@ export default class OptimizerWebview {
         </style>
       </head>
       <body>
-        <h1>Windows Setup Helper</h1>
-        <p>Select items below then click the install button to install and enable useful developer tools.</p>
+        <h1>Optimize Windows for Development</h1>
+        <p>Windows is already a great development platform and with a few tweaks we can make it even better. 
+        Select one or more tools and then click the configure button. Please note, some tools may require a restart.</p>
         <ul class="check-list">
           ${checksHtml}
-          <li style="margin: 20px 0 0 0"><button onClick="handleClick('execSelected')">Install Selected</button></li>
+          <li style="margin: 20px 0 0 0"><button onClick="handleClick('execSelected')">Configure Selected</button></li>
         </ul>
 
         <script>

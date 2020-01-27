@@ -17,7 +17,7 @@
     "commands": [
       {
         "command": "windevoptimizer.configureDefender",
-        "title": "Configure Windows Defender for folder..."
+        "title": "Configure Windows Defender for this folder..."
       },
       {
         "command": "windevoptimizer.configureIndexer",

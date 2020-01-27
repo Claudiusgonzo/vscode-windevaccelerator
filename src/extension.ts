@@ -30,7 +30,7 @@ export function activate(context: ExtensionContext) {
   window
     .showInformationMessage(
       `Hey there! Let's get your Windows environment setup for optimal OSS
-      development. 💻`,
+      development 💻.`,
       runConfig,
       learnMore
     )
