@@ -1,6 +1,6 @@
 import * as path from "path";
 import { spawn } from "child_process";
-import { ExtensionContext, Uri } from "vscode";
+import { Uri } from "vscode";
 
 export enum CheckType {
   WSL = "WSL",
@@ -73,8 +73,8 @@ export class WSLCheck extends CheckBase implements CheckItem {
     this.type = CheckType.WSL;
     this.title = "Windows Subsystem for Linux (WSL)";
     this.details = `WSL is a Windows 10 feature that enables you to run full, native Linux distributions directly on Windows,
-    alongside your traditional Windows desktop and modern store apps. With WSL you can you can run "Linux first" command line tools such as bash, 
-    sed, awk, etc. and you can install popular Web and OSS frameworks and runtimes such as Node, Python, or PHP. 
+    alongside your traditional Windows desktop and modern store apps. With WSL you can you can run "Linux first" command line tools such as bash,
+    sed, awk, etc. and you can install popular Web and OSS frameworks and runtimes such as Node, Python, or PHP.
     `;
   }
 
@@ -105,7 +105,7 @@ export class TerminalCheck extends CheckBase implements CheckItem {
     this.type = CheckType.Terminal;
     this.title = "Windows Terminal";
     this.details = `The new Windows Terminal is a modern, fast, and feature rich terminal application for command line tools
-    and shells like the Command Prompt, PowerShell, and WSL. The Terminal supports multiple tabs, Unicode and UTF-8 characters, 
+    and shells like the Command Prompt, PowerShell, and WSL. The Terminal supports multiple tabs, Unicode and UTF-8 characters,
     GPU acceleration, and custom themes, styles, and configurations.`;
   }
 
@@ -123,7 +123,7 @@ export class FontCheck extends CheckBase implements CheckItem {
 
     this.type = CheckType.Font;
     this.title = "Cascadia Code Font";
-    this.details = `Cascadia Code is a fun new monospaced font which enhances the look and feel of the new Windows Terminal. Cascadia Code supports 
+    this.details = `Cascadia Code is a new monospaced font, which enhances the look and feel of the new Windows Terminal. Cascadia Code supports
     programming ligatures which merge symbols and remove details so the eyes are processing less while coding.
     `;
   }
@@ -143,7 +143,7 @@ export class DefenderCheck extends CheckBase implements CheckItem {
     this.type = CheckType.Defender;
     this.title = "Configure Windows Defender";
     this.details = `Windows Defender keeps your computer safe by monitoring every file change on your computer.
-    Becasue compilers can create and touch a lot of files, this can slow down the development process without providing any additional protection.
+    Because compilers can create and touch a lot of files, this can slow down the development process without providing any additional protection.
     You can configure Windows Defender to ignore specific build output folders you know are secure.
     `;
   }
@@ -162,9 +162,9 @@ export class IndexerCheck extends CheckBase implements CheckItem {
 
     this.type = CheckType.Indexer;
     this.title = "Configure Windows Indexer";
-    this.details = `The Windws Indexer service helps to improve search performance on your computer. 
+    this.details = `The Windows Indexer service helps to improve search performance on your computer.
     By using the new Enhanced Search feature of Windows 10, you can exclude certain search locations
-    such as build outputs that change frequently and are not relevant when providing search results. 
+    such as build outputs that change frequently and are not relevant when providing search results.
     `;
   }
 
