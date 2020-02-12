@@ -1,7 +1,17 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT license.
+
 import { ExtensionContext, WebviewPanel, Uri } from "vscode";
 import * as path from "path";
 
-import { CheckItem, TerminalCheck, WSLCheck, FontCheck, DefenderCheck, IndexerCheck} from "./base";
+import {
+  CheckItem,
+  TerminalCheck,
+  WSLCheck,
+  FontCheck,
+  DefenderCheck,
+  IndexerCheck
+} from "./base";
 
 export default function initializeChecks(
   context: ExtensionContext,
@@ -24,7 +34,6 @@ export default function initializeChecks(
     path.join(context.extensionPath, "resources", "indexer.png")
   );
 
- 
   return new Array(
     new WSLCheck(panel.webview.asWebviewUri(wslImagePath)),
     new TerminalCheck(panel.webview.asWebviewUri(terminalImagePath)),
@@ -33,6 +42,3 @@ export default function initializeChecks(
     new IndexerCheck(panel.webview.asWebviewUri(indexerImagePath))
   );
 }
-
-
-

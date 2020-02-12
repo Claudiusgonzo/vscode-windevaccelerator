@@ -1,3 +1,6 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT license.
+
 import {
   window,
   ViewColumn,
@@ -162,7 +165,7 @@ export default class OptimizerWebview {
       </head>
       <body>
         <h1>Optimize Windows for Development</h1>
-        <p>Windows is already a great development platform and with a few tweaks we can make it even better. 
+        <p>Windows is already a great development platform and with a few tweaks we can make it even better.
         Select one or more tools and then click the configure button. Please note, some tools may require a restart.</p>
         <ul class="check-list">
           ${checksHtml}

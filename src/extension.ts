@@ -1,3 +1,6 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT license.
+
 import { window, ExtensionContext, MessageItem, commands } from "vscode";
 import { platform } from "os";
 
