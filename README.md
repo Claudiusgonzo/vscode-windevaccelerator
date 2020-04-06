@@ -1,4 +1,4 @@
-# Windows DevBox Optimizer
+# Windows Development Accelerator
 
 Use this extension to optimize your Windows development environment for OSS
 development.

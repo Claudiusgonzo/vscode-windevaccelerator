@@ -21,12 +21,12 @@ export function activate(context: ExtensionContext) {
   const indexerOptimizer = new IndexerOptimizer();
 
   commands.registerCommand(
-    "windevoptimizer.configureDefender",
+    "windevaccelerator.configureDefender",
     defenderOptimizer.configureFolder
   );
 
   commands.registerCommand(
-    "windevoptimizer.configureIndexer",
+    "windevaccelerator.configureIndexer",
     indexerOptimizer.configureFolder
   );
 
