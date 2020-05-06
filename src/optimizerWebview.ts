@@ -159,6 +159,21 @@ export default class OptimizerWebview {
 
           .check-item-details h1,
           .check-item-details p { margin: 0 0 5px 0; }
+          .button {
+            box-sizing: border-box;
+            display: inline-block;
+            text-align: center;
+            cursor: pointer;
+            padding: 5px 10px;
+            outline-offset: 2px!important;
+            color: var(--vscode-button-foreground);
+            background: var(--vscode-button-background);
+          }
+
+          .button:hover {
+            color: var(--vscode-button-foreground);
+            background: var(--vscode-button-hoverBackground);
+          }
 
           h1 { font-size: 22px; }
         </style>
@@ -169,7 +184,7 @@ export default class OptimizerWebview {
         Select one or more tools and then click the configure button. Please note, some tools may require a restart.</p>
         <ul class="check-list">
           ${checksHtml}
-          <li style="margin: 20px 0 0 0"><button onClick="handleClick('execSelected')">Configure Selected</button></li>
+          <li style="margin: 20px 0 0 0"><a class="button" role="button" title="Configure Selected" onClick="handleClick('execSelected')">Configure Selected</a></li>
         </ul>
 
         <script>
